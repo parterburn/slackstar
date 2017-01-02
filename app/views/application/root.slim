@@ -1,0 +1,35 @@
+- if cookies[:ss_access_tokens].present?
+  p= link_to "Logout of #{pluralize(@all_tokens.length, 'account')}", clear_path, class: 'btn btn-link btn-sm pull-right'
+  br
+
+- @teams.each do |team|
+  - if team.second.present?
+    - team.second.each do |msg|
+      - if msg['type'] == "message"
+        .panel.panel-default
+          .panel-body
+            p
+              strong=> msg['message']['user'] || msg['message']['bot_id']
+              small
+                = link_to msg['message']['permalink'], target: '_blank', class: 'text-muted' do
+                  = DateTime.strptime(msg['message']['ts'].to_s, '%s').strftime("%b %-d, %Y at %-I:%M %p")          
+            = format_text(msg['message']['text'])
+            small.text-muted Posted in #{team.first} #{msg['channel']} 
+      - if msg['type'] == "file"
+        .panel.panel-warning
+          .panel-body
+            p
+              strong=> msg['file']['user']
+              small.text-muted
+                = link_to msg['file']['permalink'], target: '_blank', class: 'text-muted' do
+                  = DateTime.strptime(msg['file']['timestamp'].to_s, '%s').strftime("%b %-d, %Y at %-I:%M %p")
+            p= link_to msg['file']['name'], msg['file']['url_private_download']
+            - if msg['file']['initial_comment'].present?
+              p= format_text(msg['file']['initial_comment']['comment'])
+            small.text-muted Posted in #{team.first} #{msg['file']['channels'].to_sentence}
+
+p
+  br
+  p= link_to "https://slack.com/oauth/authorize?scope=stars%3Aread&client_id=#{ENV['SLACK_APP_CLIENT_ID']}" do
+    img alt="Sign in with Slack" height="40" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x), https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" width="172"
+  br

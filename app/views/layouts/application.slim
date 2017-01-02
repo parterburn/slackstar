@@ -1,0 +1,16 @@
+doctype html
+html lang="en"
+  head
+    title Slackstar
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag    '//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
+    = stylesheet_link_tag    '//cdnjs.cloudflare.com/ajax/libs/todc-bootstrap/3.3.6-3.3.6/css/bootstrap-theme.min.css'
+    = stylesheet_link_tag    '//cdnjs.cloudflare.com/ajax/libs/todc-bootstrap/3.3.6-3.3.6/css/todc-bootstrap.min.css'
+  body
+    .container-fluid
+      - if @error.present?
+        .alert.alert-danger Error: #{@error}
+      = yield
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag '//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'
